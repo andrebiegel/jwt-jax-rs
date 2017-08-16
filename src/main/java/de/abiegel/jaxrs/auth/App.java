@@ -9,15 +9,4 @@ import javax.ws.rs.core.Application;
 @ApplicationPath("app")
 public class App extends Application {
 
-	@Override
-	public Set<Class<?>> getClasses() {
-		Set<Class<?>> res = new HashSet<>();
-		res.add(LoginResource.class);
-		res.add(SecuredResource.class);
-		res.add(JwtSecuredFilter.class);
-		
-		
-		return res; 
-	}
-
 }

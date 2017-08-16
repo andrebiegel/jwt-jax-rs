@@ -59,7 +59,7 @@ public class LoginResource {
 
 
 	private void authenticateUser(String user, String password) {
-		if ("42".equals(password)) {
+		if (!"42".equals(password)) {
 			throw new SecurityException("no access bro");
 		}
 		
