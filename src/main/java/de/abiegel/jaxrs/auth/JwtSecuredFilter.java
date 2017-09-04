@@ -5,6 +5,8 @@ package de.abiegel.jaxrs.auth;
 
 import java.io.IOException;
 import java.security.Key;
+import java.security.Principal;
+import java.util.List;
 
 import javax.annotation.Priority;
 import javax.crypto.KeyGenerator;
@@ -14,8 +16,11 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 
 /**
@@ -35,6 +40,7 @@ public class JwtSecuredFilter implements ContainerRequestFilter {
 	    // Get the HTTP Authorization header from the request
         String authorizationHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
  
+        if (authorizationHeader == null )    requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
         // Extract the token from the HTTP Authorization header
         String token = authorizationHeader.substring("Bearer".length()).trim();
  
@@ -42,8 +48,38 @@ public class JwtSecuredFilter implements ContainerRequestFilter {
  
             // Validate the token
             Key key = LoginResource.generateKey();
-            Jwts.parser().setSigningKey(key).parseClaimsJws(token);
+          Jws<Claims> claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token);
 
+            final SecurityContext currentSecurityContext = requestContext.getSecurityContext();
+            requestContext.setSecurityContext(new SecurityContext() {
+
+                @Override
+                public Principal getUserPrincipal() {
+
+                    return new Principal() {
+
+                        @Override
+                        public String getName() {
+                            return claims.getBody().getSubject();
+                        }
+                    };
+                }
+
+                @Override
+                public boolean isUserInRole(String role) {
+                    return role.equals(claims.getBody().getSubject());
+                }
+
+                @Override
+                public boolean isSecure() {
+                    return currentSecurityContext.isSecure();
+                }
+
+                @Override
+                public String getAuthenticationScheme() {
+                    return "Bearer";
+                }
+            });
  
         } catch (Exception e) {
 

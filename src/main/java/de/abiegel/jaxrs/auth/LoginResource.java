@@ -4,6 +4,7 @@ import java.security.Key;
 
 import java.time.Instant;
 import java.util.Date;
+import java.util.UUID;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.transaction.Transactional;
@@ -51,7 +52,8 @@ public class LoginResource {
 		String jwt = Jwts.builder()
 				.setSubject(user).setIssuer(uriInfo.getAbsolutePath().toString())
 				.setIssuedAt(Date.from(Instant.now()))
-				.setExpiration(Date.from(Instant.now().plusSeconds(15l)))
+				.setId(UUID.randomUUID().toString())
+				.setExpiration(Date.from(Instant.now().plusSeconds(120l)))
                 .signWith(SignatureAlgorithm.HS512, key)
                 .compact();
 		return jwt;
