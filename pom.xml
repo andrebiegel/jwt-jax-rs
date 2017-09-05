@@ -8,9 +8,11 @@
 	<name>jaxrs-auth-example</name>
 	
 	<properties>
+		<version.dockerfile-maven>1.3.5</version.dockerfile-maven>
 		<failOnMissingWebXml>false</failOnMissingWebXml>
 		<maven.compiler.source>1.8</maven.compiler.source>
-    	<maven.compiler.target>1.8</maven.compiler.target>
+    		<maven.compiler.target>1.8</maven.compiler.target>
+    		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -46,6 +48,136 @@
 		
 	</dependencies>
 	<build>
-	<finalName>${project.name}</finalName>
-	</build>
+	<!-- <finalName>${project.name}</finalName>-->
+  <plugins>
+    <plugin>
+       <artifactId>maven-resources-plugin</artifactId>
+       <executions>
+          <execution>
+             <id>copy-resources</id>
+             <phase>process-resources</phase>
+             <goals>
+                 <goal>copy-resources</goal>
+             </goals>
+             <configuration>
+               <outputDirectory>${basedir}/target</outputDirectory>
+               <resources>
+                  <resource>
+                     <directory>src/main/resources/docker</directory>
+                     <includes>
+                        <include>dockerfile</include>
+                     </includes>
+                  </resource>
+               </resources>
+             </configuration>
+           </execution>
+        </executions>
+     </plugin>
+     <plugin>
+        <groupId>com.google.code.maven-replacer-plugin</groupId>
+        <artifactId>replacer</artifactId>
+        <version>1.5.3</version>
+        <executions>
+            <execution>
+               <phase>prepare-package</phase>
+               <goals>
+                   <goal>replace</goal>
+               </goals>
+            </execution>
+        </executions>
+        <configuration>
+             <file>${basedir}/target/Dockerfile</file>
+             <replacements>
+                 <replacement>
+                     <token>IMAGE_VERSION</token>
+                     <value>${project.version}</value>
+                 </replacement>
+             </replacements>
+         </configuration>
+     </plugin>
+     <plugin>
+         <groupId>com.spotify</groupId>
+         <artifactId>dockerfile-maven-plugin</artifactId>
+         <version>${version.dockerfile-maven}</version>
+    <executions>
+       <execution>
+       <id>default</id>
+       <goals>
+          <goal>build</goal>
+          
+       </goals>
+       </execution>
+     </executions>
+     <configuration>
+          <contextDirectory>${project.build.directory}</contextDirectory>
+          <repository>abiegel/jaxrs</repository>
+          <tag>${project.version}</tag>
+     </configuration>
+    </plugin>
+    
+    <plugin>
+    <groupId>io.fabric8</groupId>
+    <artifactId>docker-maven-plugin</artifactId>
+    <version>0.22.1</version>
+    <executions>
+        <execution>
+            <id>prepare-it-backend</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+                <goal>start</goal>
+            </goals>
+            <configuration>
+                <images>
+                    <image>
+                        <name>abiegel/jaxrs:${project.version}</name>
+                        <alias>it-backend</alias>
+                        <run>
+                            <ports>
+                                <port>it-backend.port:8080</port>
+                            </ports>
+                            <log/>
+                           <wait>
+                          <http>
+      <url>http://localhost:${it-backend.port}/${project.artifactId}-${project.version}</url>
+    </http>
+    							<time>15000</time>
+                            </wait>
+                        </run>
+                    </image>
+                </images>
+            </configuration>
+        </execution>
+        <execution>
+            <id>remove-it-database</id>
+            <phase>post-integration-test</phase>
+            <goals>
+                <goal>stop</goal>
+                <goal>remove</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+    
+    
+    <plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-failsafe-plugin</artifactId>
+  <executions>
+    <execution>
+    
+      <goals>
+        <goal>integration-test</goal>
+        <goal>verify</goal>
+      </goals>
+      <configuration>
+    <environmentVariables>
+      <it-backend.port>${it-backend.port}</it-backend.port>
+    </environmentVariables>
+    </configuration>
+    </execution>
+  </executions>
+  
+</plugin>
+  </plugins>
+</build>
 </project>

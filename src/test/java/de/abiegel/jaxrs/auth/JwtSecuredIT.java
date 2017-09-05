@@ -26,7 +26,8 @@ public class JwtSecuredIT {
 
 	@Test
 	public void testUnSecuredResourceAccess() {
-		 WebTarget target = ClientBuilder.newClient().target(URI.create("http://localhost:8080/jaxrs-auth-example/app"));
+		
+		 WebTarget target = ClientBuilder.newClient().target(URI.create("http://localhost:"+System.getenv("it-backend.port")+"/jaxrs-auth-example-0.0.1-SNAPSHOT/app"));
 		 
 		String result = target.path("/hello").queryParam("message", "dude").request(MediaType.TEXT_PLAIN).get(String.class);
 		 assertEquals("hello dude", result);
@@ -34,14 +35,16 @@ public class JwtSecuredIT {
 
 	@Test(expected= NotAuthorizedException.class)
 	public void testSecuredResourceAccess() {
-		 WebTarget target = ClientBuilder.newClient().target(URI.create("http://localhost:8080/jaxrs-auth-example/app/hello"));
+		 WebTarget target = ClientBuilder.newClient().target(URI.create("http://localhost:"+System.getenv("it-backend.port")+"/jaxrs-auth-example-0.0.1-SNAPSHOT/app/hello"));
 		 target.path("/secured").queryParam("message", "dude").request(MediaType.TEXT_PLAIN).get(String.class);
 		
 	}
 
 	@Test
 	public void testLogin() {
-		 WebTarget target = ClientBuilder.newClient().target(URI.create("http://localhost:8080/jaxrs-auth-example/app"));
+		System.out.println("http://localhost:"+System.getenv("it-backend.port")+"/jaxrs-auth-example-0.0.1-SNAPSHOT/app");
+		
+		 WebTarget target = ClientBuilder.newClient().target(URI.create("http://localhost:"+System.getenv("it-backend.port")+"/jaxrs-auth-example-0.0.1-SNAPSHOT/app"));
 		 Form form = new Form();
 		 form.param("user", "user");
 		 form.param("password", "42");
@@ -55,7 +58,7 @@ public class JwtSecuredIT {
 	
 	@Test
 	public void testSecuredAccessWithLogin() {
-		 WebTarget target = ClientBuilder.newClient().target(URI.create("http://localhost:8080/jaxrs-auth-example/app"));
+		 WebTarget target = ClientBuilder.newClient().target(URI.create("http://localhost:"+System.getenv("it-backend.port")+"/jaxrs-auth-example-0.0.1-SNAPSHOT/app"));
 		 Form form = new Form();
 		 form.param("user", "user");
 		 form.param("password", "42");
@@ -64,7 +67,7 @@ public class JwtSecuredIT {
 		 assertEquals(HttpURLConnection.HTTP_OK,response.getStatus());
 		 assertNotNull(response.getHeaderString(HttpHeaders.AUTHORIZATION));
 		 String authToken = response.getHeaderString(HttpHeaders.AUTHORIZATION);
-		 WebTarget hello = ClientBuilder.newClient().target(URI.create("http://localhost:8080/jaxrs-auth-example/app/hello"));
+		 WebTarget hello = ClientBuilder.newClient().target(URI.create("http://localhost:"+System.getenv("it-backend.port")+"/jaxrs-auth-example-0.0.1-SNAPSHOT/app/hello"));
 		String result =hello.path("/secured").queryParam("message", "dude").request(MediaType.TEXT_PLAIN).header(HttpHeaders.AUTHORIZATION, authToken).get(String.class);
 		 assertEquals("hello user dude", result);
 	}
