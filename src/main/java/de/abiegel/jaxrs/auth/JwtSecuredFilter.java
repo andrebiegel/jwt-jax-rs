@@ -40,7 +40,10 @@ public class JwtSecuredFilter implements ContainerRequestFilter {
 	    // Get the HTTP Authorization header from the request
         String authorizationHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
  
-        if (authorizationHeader == null )    requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
+        if (authorizationHeader == null || authorizationHeader.isEmpty()  )  {
+        	requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
+        	return; 
+        }
         // Extract the token from the HTTP Authorization header
         String token = authorizationHeader.substring("Bearer".length()).trim();
  
@@ -82,7 +85,7 @@ public class JwtSecuredFilter implements ContainerRequestFilter {
             });
  
         } catch (Exception e) {
-
+        		System.out.println(e);
             requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
         }
 
