@@ -1,4 +1,4 @@
-FROM airhacks/payara-micro
+FROM airhacks/glassfish5
 
 ENV ARCHIVE_NAME jaxrs-auth-example-IMAGE_VERSION.war
 COPY jaxrs-auth-example-IMAGE_VERSION.war ${DEPLOYMENT_DIR}	
