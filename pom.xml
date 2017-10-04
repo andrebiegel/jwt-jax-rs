@@ -113,6 +113,14 @@
           <repository>abiegel/jaxrs</repository>
           <tag>${project.version}</tag>
      </configuration>
+     <dependencies>
+      <dependency>
+<groupId>org.codehaus.plexus</groupId>
+<artifactId>plexus-archiver</artifactId>
+<version>3.0.3</version>
+</dependency>
+     </dependencies>
+     
     </plugin>
     
     <plugin>
