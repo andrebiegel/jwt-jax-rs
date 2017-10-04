@@ -8,7 +8,7 @@
 	<name>jaxrs-auth-example</name>
 	
 	<properties>
-		<version.dockerfile-maven>1.3.5</version.dockerfile-maven>
+		<version.dockerfile-maven>1.3.6</version.dockerfile-maven>
 		<failOnMissingWebXml>false</failOnMissingWebXml>
 		<maven.compiler.source>1.8</maven.compiler.source>
     		<maven.compiler.target>1.8</maven.compiler.target>
