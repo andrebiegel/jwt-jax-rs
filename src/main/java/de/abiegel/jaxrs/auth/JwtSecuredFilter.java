@@ -6,11 +6,8 @@ package de.abiegel.jaxrs.auth;
 import java.io.IOException;
 import java.security.Key;
 import java.security.Principal;
-import java.util.List;
 
 import javax.annotation.Priority;
-import javax.crypto.KeyGenerator;
-import javax.inject.Inject;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
