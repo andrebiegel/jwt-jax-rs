@@ -24,9 +24,9 @@ import io.jsonwebtoken.Jwts;
  * @author abiegel
  *
  */
-@Provider
-@JwtSecured
-@Priority(Priorities.AUTHENTICATION)
+//@Provider
+//@JwtSecured
+//@Priority(Priorities.AUTHENTICATION)
 public class JwtSecuredFilter implements ContainerRequestFilter {
 	 
 	

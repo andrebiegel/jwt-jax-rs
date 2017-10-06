@@ -11,7 +11,7 @@ import javax.ws.rs.NameBinding;
  * @author abiegel
  *
  */
-@NameBinding
+//@NameBinding
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD})
 public @interface JwtSecured {

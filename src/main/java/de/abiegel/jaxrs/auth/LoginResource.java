@@ -7,6 +7,15 @@ import java.util.Date;
 import java.util.UUID;
 
 import javax.crypto.spec.SecretKeySpec;
+import javax.inject.Inject;
+import javax.security.enterprise.SecurityContext;
+import javax.security.enterprise.authentication.mechanism.http.AuthenticationParameters;
+import javax.security.enterprise.credential.UsernamePasswordCredential;
+import javax.security.enterprise.identitystore.CredentialValidationResult;
+import javax.security.enterprise.identitystore.IdentityStore.ValidationType;
+import javax.security.enterprise.identitystore.IdentityStoreHandler;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -31,12 +40,15 @@ public class LoginResource {
 	
 	 @Context
 	 private UriInfo uriInfo;
+	 
+	 @Inject SecurityContext context; 
+	 @Inject IdentityStoreHandler handler ; 
 	
 	@POST
-	public Response authenicate(@FormParam("user") String user, @FormParam("password") String password) {
+	public Response authenicate(@Context HttpServletRequest request ,@Context HttpServletResponse response , @FormParam("user") String user, @FormParam("password") String password) {
 	
 		try {
-			authenticateUser(user, password);
+			authenticateUser(request, response,  user, password);
 			String token = issueTokenFor(user);
 			return Response.ok().header(HttpHeaders.AUTHORIZATION, "Bearer "+ token).build();
 		} catch (Exception e) {
@@ -60,11 +72,18 @@ public class LoginResource {
 	}
 
 
-	private void authenticateUser(String user, String password) {
-		if (!"42".equals(password)) {
-			throw new SecurityException("no access bro");
-		}
+	private void authenticateUser(HttpServletRequest request, HttpServletResponse response, String user, String password) {
+		CredentialValidationResult result = this.handler.validate(new UsernamePasswordCredential(user, password));
 		
+	
+	
+		 if (CredentialValidationResult.Status.INVALID.equals(result.getStatus())) {
+			 throw new SecurityException("no access bro");
+		}
+		//if (!"42".equals(password)) {
+		//	throw new SecurityException("no access bro");
+		//}
+	
 	}
 	
     public static Key generateKey() {
