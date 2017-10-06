@@ -1,7 +1,6 @@
 package de.abiegel.jaxrs.auth;
 
 import java.security.Key;
-
 import java.time.Instant;
 import java.util.Date;
 import java.util.UUID;
@@ -9,10 +8,8 @@ import java.util.UUID;
 import javax.crypto.spec.SecretKeySpec;
 import javax.inject.Inject;
 import javax.security.enterprise.SecurityContext;
-import javax.security.enterprise.authentication.mechanism.http.AuthenticationParameters;
 import javax.security.enterprise.credential.UsernamePasswordCredential;
 import javax.security.enterprise.identitystore.CredentialValidationResult;
-import javax.security.enterprise.identitystore.IdentityStore.ValidationType;
 import javax.security.enterprise.identitystore.IdentityStoreHandler;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

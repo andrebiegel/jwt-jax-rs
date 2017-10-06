@@ -29,7 +29,7 @@ public class SecuredResource {
 	
 	@GET
 	@Path("secured")
-	@JwtSecured	
+	
 	@RolesAllowed({ "user" })
 	public String helloPersonalized(@Context HttpServletRequest request, @QueryParam("message") String message) {
 		return "hello " + request.getUserPrincipal().getName() + " " + message;
