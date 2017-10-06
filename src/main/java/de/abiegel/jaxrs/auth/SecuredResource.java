@@ -17,7 +17,6 @@ import javax.ws.rs.core.MediaType;
  *
  */
 @Path("/hello")
-@DeclareRoles({"user","admin"})
 @Produces(MediaType.TEXT_PLAIN)
 public class SecuredResource {
 
@@ -28,9 +27,8 @@ public class SecuredResource {
 	@Inject javax.security.enterprise.SecurityContext context;
 	
 	@GET
-	@Path("secured")
+	@Path("secured")	
 	
-	@RolesAllowed({ "user" })
 	public String helloPersonalized(@Context HttpServletRequest request, @QueryParam("message") String message) {
 		return "hello " + request.getUserPrincipal().getName() + " " + message;
 	}
