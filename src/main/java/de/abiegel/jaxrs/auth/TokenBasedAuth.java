@@ -28,30 +28,35 @@ public class TokenBasedAuth implements HttpAuthenticationMechanism {
 	@Override
 	public AuthenticationStatus validateRequest(HttpServletRequest request, HttpServletResponse response,
 			HttpMessageContext httpMessageContext) throws AuthenticationException {
-	    // Get the HTTP Authorization header from the request
-        String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
- 
-        if (authorizationHeader == null || authorizationHeader.isEmpty()  )  
-        
-        	return httpMessageContext.doNothing();
-       
-        // Extract the token from the HTTP Authorization header
-        String token = authorizationHeader.substring("Bearer".length()).trim();
- 
-        try {
- 
-            // Validate the token
-            Key key = LoginResource.generateKey();
-          Jws<Claims> claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token);
+		
+		if (httpMessageContext.isProtected()) {
+			 // Get the HTTP Authorization header from the request
+	        String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+	 
+	        if (authorizationHeader == null || authorizationHeader.isEmpty()  )  
+	        
+	        	return httpMessageContext.responseUnauthorized();
+	       
+	        // Extract the token from the HTTP Authorization header
+	        String token = authorizationHeader.substring("Bearer".length()).trim();
+	 
+	        try {
+	 
+	            // Validate the token
+	            Key key = LoginResource.generateKey();
+	          Jws<Claims> claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token);
 
-          
-         return  httpMessageContext.notifyContainerAboutLogin(claims.getBody().getSubject(), new HashSet<>(Arrays.asList(claims.getBody().getSubject())));
-           
-        } catch (Exception e) {
-        		System.out.println(e);
-        		return httpMessageContext.doNothing();
-        }
+	          
+	         return  httpMessageContext.notifyContainerAboutLogin(claims.getBody().getSubject(), new HashSet<>(Arrays.asList(claims.getBody().getSubject())));
+	           
+	        } catch (Exception e) {
+	        		System.out.println(e);
+	        		return httpMessageContext.responseUnauthorized();
+	        }
 
+		}
+		
+	   return httpMessageContext.doNothing();
 		
 	}
 
