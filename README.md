@@ -14,9 +14,10 @@ The integration test therefore tests the following communication sequence.
 
 ##Requirements
 
-* Java 8 
+* Java 8 JEE7
 * Docker
 * Maven
+
 
 ## Sources
 the following sources have been used to realize this demo. 
