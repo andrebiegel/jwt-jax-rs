@@ -7,4 +7,4 @@ Jax rs  Playground , which tests several scenarios
 
 # Tested upon 
 
-jdk 9 
+jdk 8 
