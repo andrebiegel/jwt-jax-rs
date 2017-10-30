@@ -50,7 +50,7 @@ public class JwtSecuredIT {
 		 form.param("password", "42");
 		 System.out.println(Entity.form(form).toString());
 		 Response response = target.path("/login").request(MediaType.APPLICATION_JSON).post(Entity.form(form), Response.class);
-		 assertEquals(HttpURLConnection.HTTP_OK,response.getStatus());
+		 assertEquals(HttpURLConnection.HTTP_NO_CONTENT,response.getStatus());
 		 assertNotNull(response.getHeaderString(HttpHeaders.AUTHORIZATION));
 		 
 		
@@ -64,7 +64,7 @@ public class JwtSecuredIT {
 		 form.param("password", "42");
 		 System.out.println(Entity.form(form).toString());
 		 Response response = target.path("/login").request(MediaType.APPLICATION_JSON).post(Entity.form(form), Response.class);
-		 assertEquals(HttpURLConnection.HTTP_OK,response.getStatus());
+		 assertEquals(HttpURLConnection.HTTP_NO_CONTENT,response.getStatus());
 		 assertNotNull(response.getHeaderString(HttpHeaders.AUTHORIZATION));
 		 String authToken = response.getHeaderString(HttpHeaders.AUTHORIZATION);
 		 WebTarget hello = ClientBuilder.newClient().target(URI.create("http://localhost:"+System.getenv("it-backend.port")+"/jaxrs-auth-example-0.0.1-SNAPSHOT/app/hello"));
