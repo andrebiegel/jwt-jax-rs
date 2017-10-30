@@ -27,3 +27,4 @@ the following sources have been used to realize this demo.
 * https://github.com/fabric8io/docker-maven-plugin
 * https://jwt.io/
 * https://github.com/javaee
+* http://arjan-tijms.omnifaces.org/2012/11/implementing-container-authentication.html
