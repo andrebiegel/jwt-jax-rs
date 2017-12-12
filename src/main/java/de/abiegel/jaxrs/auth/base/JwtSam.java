@@ -46,7 +46,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
  * @author Arjan Tijms
  * 
  */
-public class TestServerAuthModule implements ServerAuthModule {
+public class JwtSam implements ServerAuthModule {
 
     private CallbackHandler handler;
     private AuthNStore authn = new AuthNStore();
