@@ -1,8 +1,5 @@
 package de.abiegel.jaxrs.auth;
 
-import javax.annotation.security.DeclareRoles;
-import javax.annotation.security.RolesAllowed;
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -24,7 +21,6 @@ public class SecuredResource {
 	public String helloAnonymous(@QueryParam("message") String message) {
 		return "hello " + message; 
 	}
-	@Inject javax.security.enterprise.SecurityContext context;
 	
 	@GET
 	@Path("secured")	
