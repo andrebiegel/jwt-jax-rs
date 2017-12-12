@@ -57,6 +57,7 @@ public class TestServerAuthModule implements ServerAuthModule {
     public void initialize(MessagePolicy requestPolicy, MessagePolicy responsePolicy, CallbackHandler handler,
         @SuppressWarnings("rawtypes") Map options) throws AuthException {
         this.handler = handler;
+     	System.out.println("SAM -------  initialized");
     }
 
     @Override
@@ -65,8 +66,7 @@ public class TestServerAuthModule implements ServerAuthModule {
 
         HttpServletRequest request = (HttpServletRequest) messageInfo.getRequestMessage();
         HttpServletResponse response = (HttpServletResponse) messageInfo.getResponseMessage();
-
-        Callback[] callbacks;
+        System.out.println("login -------  triggered");
 
     	if (Jaspic.isAuthenticationRequest(request)) {
 			return issueingPhase(clientSubject,this.handler,request, response);
@@ -76,33 +76,9 @@ public class TestServerAuthModule implements ServerAuthModule {
 			return validationPhase(clientSubject,this.handler,request,response);
 		}
         
-        if (request.getParameter("doLogin") != null) {
+ 
 
-            // For the test perform a login by directly "returning" the details of the authenticated user.
-            // Normally credentials would be checked and the details fetched from some repository
-
-            callbacks = new Callback[] {
-                // The name of the authenticated user
-                new CallerPrincipalCallback(clientSubject, "test"),
-                // the roles of the authenticated user
-                new GroupPrincipalCallback(clientSubject, new String[] { "architect" })
-            };
-        } else {
-
-            // The JASPIC protocol for "do nothing"
-            callbacks = new Callback[] { new CallerPrincipalCallback(clientSubject, (Principal) null) };
-        }
-
-        try {
-
-            // Communicate the details of the authenticated user to the container. In many
-            // cases the handler will just store the details and the container will actually handle
-            // the login after we return from this method.
-            handler.handle(callbacks);
-
-        } catch (IOException | UnsupportedCallbackException e) {
-            throw (AuthException) new AuthException().initCause(e);
-        }
+    
 
         return SUCCESS;
     }
