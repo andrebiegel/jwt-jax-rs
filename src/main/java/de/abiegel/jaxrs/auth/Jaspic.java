@@ -1,7 +1,6 @@
 package de.abiegel.jaxrs.auth;
 
 import static java.lang.Boolean.TRUE;
-
 import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
 
 import java.io.IOException;

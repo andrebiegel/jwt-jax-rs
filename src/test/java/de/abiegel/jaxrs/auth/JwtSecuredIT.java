@@ -1,13 +1,12 @@
 package de.abiegel.jaxrs.auth;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.net.HttpURLConnection;
 import java.net.URI;
 
-import javax.naming.AuthenticationException;
 import javax.ws.rs.NotAuthorizedException;
-import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
@@ -17,8 +16,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.junit.Test;
-
-import com.sun.mail.imap.protocol.Status;
 
 
 
@@ -66,6 +63,7 @@ public class JwtSecuredIT {
 		 Response response = target.path("/login").request(MediaType.APPLICATION_JSON).post(Entity.form(form), Response.class);
 		 assertEquals(HttpURLConnection.HTTP_NO_CONTENT,response.getStatus());
 		 assertNotNull(response.getHeaderString(HttpHeaders.AUTHORIZATION));
+		 System.out.println(response.getHeaderString(HttpHeaders.AUTHORIZATION));
 		 String authToken = response.getHeaderString(HttpHeaders.AUTHORIZATION);
 		 WebTarget hello = ClientBuilder.newClient().target(URI.create("http://localhost:"+System.getenv("it-backend.port")+"/jaxrs-auth-example-0.0.1-SNAPSHOT/app/hello"));
 		String result =hello.path("/secured").queryParam("message", "dude").request(MediaType.TEXT_PLAIN).header(HttpHeaders.AUTHORIZATION, authToken).get(String.class);

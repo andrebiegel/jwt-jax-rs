@@ -112,8 +112,8 @@ public class JwtSam implements ServerAuthModule {
 
 			// Validate the token
 			Key key = generateKey();
-			Jws<Claims> claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token);
-
+			Jws<Claims> claims = Jwts.parser().requireIssuer(request.getLocalName().toString()).setSigningKey(key).parseClaimsJws(token);
+			System.out.println(claims.toString());
 			return Jaspic.notifyContainerAboutLogin(clientSubject, handler,claims.getBody().getSubject(),
 					new HashSet<>(Arrays.asList(claims.getBody().getSubject())));
 
