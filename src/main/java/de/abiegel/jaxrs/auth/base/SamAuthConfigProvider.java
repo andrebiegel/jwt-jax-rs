@@ -26,6 +26,7 @@ public class SamAuthConfigProvider implements AuthConfigProvider {
 
     public SamAuthConfigProvider(ServerAuthModule serverAuthModule) {
         this.serverAuthModule = serverAuthModule;
+     	System.out.println("SamAuthConfigProvider -------   initiated");
     }
 
     /**
@@ -52,6 +53,7 @@ public class SamAuthConfigProvider implements AuthConfigProvider {
     @Override
     public ServerAuthConfig getServerAuthConfig(String layer, String appContext, CallbackHandler handler) throws AuthException,
         SecurityException {
+    	System.out.println("SamServerAuthConfig -------   registrated");
         return new SamServerAuthConfig(layer, appContext, handler == null ? createDefaultCallbackHandler() : handler,
             providerProperties, serverAuthModule);
     }

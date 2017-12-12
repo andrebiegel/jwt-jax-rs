@@ -31,11 +31,13 @@ public class SamServerAuthConfig implements ServerAuthConfig {
         this.handler = handler;
         this.providerProperties = providerProperties;
         this.serverAuthModule = serverAuthModule;
+     	System.out.println("SamServerAuthConfig -------   instanciated"); 
     }
 
     @Override
     public ServerAuthContext getAuthContext(String authContextID, Subject serviceSubject,
         @SuppressWarnings("rawtypes") Map properties) throws AuthException {
+     	System.out.println("SamServerAuthContext -------   registrated");
         return new SamServerAuthContext(handler, serverAuthModule);
     }
 

@@ -33,6 +33,7 @@ public class SamServerAuthContext implements ServerAuthContext {
     @Override
     public AuthStatus validateRequest(MessageInfo messageInfo, Subject clientSubject, Subject serviceSubject)
         throws AuthException {
+    	System.out.println("SamServerAuthContext -------   validating");
         return serverAuthModule.validateRequest(messageInfo, clientSubject, serviceSubject);
     }
 
