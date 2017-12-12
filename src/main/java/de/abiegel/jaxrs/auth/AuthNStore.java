@@ -15,8 +15,13 @@ public class AuthNStore {
 
 	  private Map<String, String> callerToPassword;
 
-	    @PostConstruct
-	    public void init() {
+	    
+	    public AuthNStore() {
+		super();
+		init();
+	}
+
+		public void init() {
 	        callerToPassword = new HashMap<>();
 	        callerToPassword.put("user", "42");
 	        callerToPassword.put("admin", "42");
@@ -26,7 +31,7 @@ public class AuthNStore {
 	public AuthenticationStatus validate(AuthParams credential) {
 		AuthenticationStatus result;
       
-      
+       System.out.println(" user  input  " +credential.getUser() );
             String expectedPW = callerToPassword.get(credential.getUser());
             // We don't allow empty passwords :)
             if (expectedPW != null && expectedPW.equals(credential.getPasswort())) {
