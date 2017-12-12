@@ -4,21 +4,13 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.security.enterprise.identitystore.CredentialValidationResult;
-import javax.security.enterprise.identitystore.IdentityStore;
-
-
-@ApplicationScoped
-public class AuthZStore implements IdentityStore {
+public class AuthZStore  {
 	
-    @Override
-    public Set<String> getCallerGroups(CredentialValidationResult validationResult) {
-        return new HashSet<>(Arrays.asList(validationResult.getCallerPrincipal().getName()));
+	/**
+	 * user name is the identity of the groups the user belongs to
+	 */
+    public Set<String> getCallerGroups(AuthParams user) {
+        return new HashSet<>(Arrays.asList(user.getUser()));
     }
 
-    @Override
-    public Set<ValidationType> validationTypes() {
-        return new HashSet<>(Arrays.asList(IdentityStore.ValidationType.PROVIDE_GROUPS));
-    }
 }
